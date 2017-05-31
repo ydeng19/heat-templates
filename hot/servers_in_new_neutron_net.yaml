@@ -7,32 +7,29 @@ description: >
   public network.
 
 parameters:
-  key_name:
-    type: string
-    description: Name of keypair to assign to servers
-  image:
+  image: ubuntuserver
     type: string
     description: Name of image to use for servers
-  flavor:
+  flavor: m1.small
     type: string
     description: Flavor to use for servers
-  public_net:
+  public_net: ext-net
     type: string
     description: >
       ID or name of public network for which floating IP addresses will be allocated
-  private_net_name:
+  private_net_name: test
     type: string
     description: Name of private network to be created
-  private_net_cidr:
+  private_net_cidr: 192.168.0.0/24
     type: string
     description: Private network address (CIDR notation)
-  private_net_gateway:
+  private_net_gateway: 192.168.0.1
     type: string
     description: Private network gateway address
-  private_net_pool_start:
+  private_net_pool_start: 192.168.0.1
     type: string
     description: Start of private network IP address allocation pool
-  private_net_pool_end:
+  private_net_pool_end: 192.168.0.200
     type: string
     description: End of private network IP address allocation pool
 
