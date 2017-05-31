@@ -67,7 +67,6 @@ resources:
       name: Server1
       image: { get_param: image }
       flavor: { get_param: flavor }
-      key_name: { get_param: key_name }
       networks:
         - port: { get_resource: server1_port }
 
@@ -90,7 +89,6 @@ resources:
       name: Server2
       image: { get_param: image }
       flavor: { get_param: flavor }
-      key_name: { get_param: key_name }
       networks:
         - port: { get_resource: server2_port }
 
