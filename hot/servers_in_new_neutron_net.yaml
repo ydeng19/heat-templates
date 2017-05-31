@@ -6,54 +6,23 @@ description: >
   assigns floating IP addresses to each server so they are routable from the
   public network.
 
-parameters:
-  image: ubuntuserver
-    type: string
-    description: Name of image to use for servers
-  flavor: m1.small
-    type: string
-    description: Flavor to use for servers
-  public_net: ext-net
-    type: string
-    description: >
-      ID or name of public network for which floating IP addresses will be allocated
-  private_net_name: test
-    type: string
-    description: Name of private network to be created
-  private_net_cidr: 192.168.0.0/24
-    type: string
-    description: Private network address (CIDR notation)
-  private_net_gateway: 192.168.0.1
-    type: string
-    description: Private network gateway address
-  private_net_pool_start: 192.168.0.1
-    type: string
-    description: Start of private network IP address allocation pool
-  private_net_pool_end: 192.168.0.200
-    type: string
-    description: End of private network IP address allocation pool
-
 resources:
   private_net:
     type: OS::Neutron::Net
     properties:
-      name: { get_param: private_net_name }
+      name: testnet
 
   private_subnet:
     type: OS::Neutron::Subnet
     properties:
       network_id: { get_resource: private_net }
-      cidr: { get_param: private_net_cidr }
-      gateway_ip: { get_param: private_net_gateway }
-      allocation_pools:
-        - start: { get_param: private_net_pool_start }
-          end: { get_param: private_net_pool_end }
+      cidr: 192.168.0.0/24
 
   router:
     type: OS::Neutron::Router
     properties:
       external_gateway_info:
-        network: { get_param: public_net }
+        network: ext-net
 
   router_interface:
     type: OS::Neutron::RouterInterface
@@ -65,8 +34,8 @@ resources:
     type: OS::Nova::Server
     properties:
       name: Server1
-      image: { get_param: image }
-      flavor: { get_param: flavor }
+      image: ubuntuserver
+      flavor: m1.small
       networks:
         - port: { get_resource: server1_port }
 
@@ -80,15 +49,15 @@ resources:
   server1_floating_ip:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network: { get_param: public_net }
+      floating_network: ext-net
       port_id: { get_resource: server1_port }
 
   server2:
     type: OS::Nova::Server
     properties:
       name: Server2
-      image: { get_param: image }
-      flavor: { get_param: flavor }
+      image: ubuntu
+      flavor: m1.small
       networks:
         - port: { get_resource: server2_port }
 
@@ -102,7 +71,7 @@ resources:
   server2_floating_ip:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network: { get_param: public_net }
+      floating_network: ext-net
       port_id: { get_resource: server2_port }
 
 outputs:
